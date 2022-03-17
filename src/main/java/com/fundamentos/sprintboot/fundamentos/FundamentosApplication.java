@@ -2,6 +2,7 @@ package com.fundamentos.sprintboot.fundamentos;
 
 import com.fundamentos.sprintboot.fundamentos.bean.MyBean;
 import com.fundamentos.sprintboot.fundamentos.bean.MyBeanWithDependency;
+import com.fundamentos.sprintboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.sprintboot.fundamentos.component.ComponentDependency;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -18,13 +19,16 @@ public class FundamentosApplication implements CommandLineRunner {
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
+	private MyBeanWithProperties myBeanWithProperties;
 
 	//Se inyecta la dependencia en el constructor (Se inyecta la interfaz)
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
-								  MyBean myBean, MyBeanWithDependency myBeanWithDependency){
+								  MyBean myBean, MyBeanWithDependency myBeanWithDependency,
+								  MyBeanWithProperties myBeanWithProperties){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
+		this.myBeanWithProperties = myBeanWithProperties;
 	}
 
 	public static void main(String[] args) {
@@ -36,5 +40,6 @@ public class FundamentosApplication implements CommandLineRunner {
 		componentDependency.saludar();
 		myBean.print();
 		myBeanWithDependency.printWithDependency();
+		System.out.println("Valores del archivo de propiedades: "+myBeanWithProperties.function());
 	}
 }
