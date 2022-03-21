@@ -5,6 +5,8 @@ import com.fundamentos.sprintboot.fundamentos.bean.MyBeanWithDependency;
 import com.fundamentos.sprintboot.fundamentos.bean.MyBeanWithProperties;
 import com.fundamentos.sprintboot.fundamentos.component.ComponentDependency;
 import com.fundamentos.sprintboot.fundamentos.pojo.UserPojo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +18,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class FundamentosApplication implements CommandLineRunner {
+
+	Log LOGGER = LogFactory.getLog(FundamentosApplication.class);
 
 	private ComponentDependency componentDependency;
 	private MyBean myBean;
@@ -47,5 +51,8 @@ public class FundamentosApplication implements CommandLineRunner {
 		System.out.println("Valores del archivo de propiedades: "+myBeanWithProperties.function());
 		System.out.println("Valores de propiedades referenciadas desde clase de propiedades: "+userPojo.getEmail() +
 				" "+userPojo.getPassword());
+
+		//Ejemplo impresion de un log tipo error
+		LOGGER.error("Impresion de log tipo error");
 	}
 }
