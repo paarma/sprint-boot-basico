@@ -1,8 +1,13 @@
 package com.fundamentos.sprintboot.fundamentos.repository;
 
 import com.fundamentos.sprintboot.fundamentos.entity.User;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Interfaz que hereda de la interfaz "JpaRepository" a la cual el enviamos como parámetros
@@ -13,4 +18,13 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    /**
+     * Dentro de la anotación @Query podemos definir una consulta JPQL personalizada.
+     */
+    @Query("Select u from User u where u.email = ?1 ")
+    Optional<User> findByUserEmail(String email);
+
+    @Query("Select u from User u where u.name like ?1%")
+    List<User> findAndSort(String name, Sort sort);
 }
