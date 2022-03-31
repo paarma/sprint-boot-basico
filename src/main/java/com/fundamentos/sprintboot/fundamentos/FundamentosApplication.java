@@ -74,6 +74,15 @@ public class FundamentosApplication implements CommandLineRunner {
 		//Usando solo foreach SIN stream
 		userRepository.findAndSort("Ju", Sort.by("id").ascending())
 				.forEach(LOGGER::info);
+
+		//Llamando a queryMethod con UN solo parametro
+		System.out.println("xxxxxxxxxxxxxxxxxxxxxx Lista de usuarios con queryMethod: ");
+		userRepository.findByName("Ana").forEach(LOGGER::info);
+
+		//Llamando a queryMethod con DOS parametro
+		LOGGER.info("xxxxxxxxxxxxxxxxxxxxxx Usuario con queryMethod con dos parametros : "+
+				userRepository.findByEmailAndName("julia@domain.com", "Julia")
+						.orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
 	}
 
 	private void saveUsersInDatabase(){
@@ -86,7 +95,10 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user3 = new User("Julia", "julia@domain.com",
 				LocalDate.of(2022, 03, 25));
 
-		List<User> list = Arrays.asList(user, user2, user3);
+		User user4 = new User("Ana", "ana222@domain.com",
+				LocalDate.of(2020, 02, 26));
+
+		List<User> list = Arrays.asList(user, user2, user3, user4);
 
 		//Se registra en BD todos los usuarios
 		list.stream().forEach(userRepository::save);
