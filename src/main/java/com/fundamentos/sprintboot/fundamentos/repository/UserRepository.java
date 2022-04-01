@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,25 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //QueryMethod
     Optional<User> findByEmailAndName(String email, String name);
 
+    //QueryMethod con LIKE
+    List<User> findByNameLike(String name);
+
+    //QueryMethod con OR
+    List<User> findByNameOrEmail(String name, String email);
+
+    //QueryMethod con Between
+    List<User> findByBirthDateBetween(LocalDate begin, LocalDate end);
+
+    /**
+     * QueryMethod con LIKE y ORDER BY
+     * La palabra "Desc" del nombre del método indica el tipo de ordenamiento
+     * (Se puede utilizar la palabra Asc)
+     */
+    List<User> findByNameLikeOrderByIdDesc(String name);
+
+    /**
+     * QueryMethod con Containing
+     * Busca los usuarios que contengan la palabra el parametro en su nombre.
+     */
+    List<User> findByNameContainingOrderByIdDesc(String name);
 }

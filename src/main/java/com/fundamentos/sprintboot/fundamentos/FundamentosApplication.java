@@ -83,6 +83,32 @@ public class FundamentosApplication implements CommandLineRunner {
 		LOGGER.info("xxxxxxxxxxxxxxxxxxxxxx Usuario con queryMethod con dos parametros : "+
 				userRepository.findByEmailAndName("julia@domain.com", "Julia")
 						.orElseThrow(() -> new RuntimeException("Usuario no encontrado")));
+
+		//Llamando a queryMethod con "LIKE"
+		userRepository.findByNameLike("%An%")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByNameLike: " + user));
+
+		//Llamando a queryMethod con "OR"
+		userRepository.findByNameOrEmail(null, "julia@domain.com")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuario findByNameOrEmail: " + user));
+
+		//Llamando a queryMethod con "Between"
+		userRepository.findByBirthDateBetween(LocalDate.of(2020,01,01),
+				LocalDate.of(2020, 12, 30))
+				.stream()
+				.forEach(user -> LOGGER.info("Usuarios entre intervalo de fechas: " + user));
+
+		//Llamando a queryMethod con "LIKE" y "ORDER BY"
+		userRepository.findByNameLikeOrderByIdDesc("%Ju%")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuarios con LIKE y ORDER BY: " + user));
+
+		//Llamando a queryMethod con "Containing" (No necesita los caracteres "%" del LIKE)
+		userRepository.findByNameContainingOrderByIdDesc("Ju")
+				.stream()
+				.forEach(user -> LOGGER.info("Usuarios con Containing y ORDER BY: " + user));
 	}
 
 	private void saveUsersInDatabase(){
