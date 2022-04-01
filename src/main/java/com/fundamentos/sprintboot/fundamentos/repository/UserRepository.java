@@ -1,9 +1,11 @@
 package com.fundamentos.sprintboot.fundamentos.repository;
 
+import com.fundamentos.sprintboot.fundamentos.dto.UserDTO;
 import com.fundamentos.sprintboot.fundamentos.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -56,4 +58,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * Busca los usuarios que contengan la palabra el parametro en su nombre.
      */
     List<User> findByNameContainingOrderByIdDesc(String name);
+
+    /**
+     * Se retorna la entidad encontrada en un objeto tipo DTO utilizando su constructor.
+     * Las palabras reservadas "parametroFecha" y "parametroEmail" referencian al valor
+     * de los parámetros que serán enviados con esos nombres.
+     * Importante: Tener en cuenta que los ":" van junto a las palabras de los parámetros
+     */
+    @Query("SELECT new com.fundamentos.sprintboot.fundamentos.dto.UserDTO(u.id, u.name, u.birthDate)" +
+            " FROM User u" +
+            " WHERE u.birthDate = :parametroFecha" +
+            " AND u.email = :parametroEmail")
+    Optional<UserDTO> getAllByBirthDateAndEmail(@Param("parametroFecha") LocalDate date,
+                                                @Param("parametroEmail") String email);
 }
