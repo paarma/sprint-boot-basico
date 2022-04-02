@@ -7,6 +7,7 @@ import com.fundamentos.sprintboot.fundamentos.component.ComponentDependency;
 import com.fundamentos.sprintboot.fundamentos.entity.User;
 import com.fundamentos.sprintboot.fundamentos.pojo.UserPojo;
 import com.fundamentos.sprintboot.fundamentos.repository.UserRepository;
+import com.fundamentos.sprintboot.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,19 +35,22 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanWithProperties myBeanWithProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 
 	//Se inyecta la dependencia en el constructor (Se inyecta la interfaz)
 	public FundamentosApplication(@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
 								  MyBean myBean, MyBeanWithDependency myBeanWithDependency,
 								  MyBeanWithProperties myBeanWithProperties,
 								  UserPojo userPojo,
-								  UserRepository userRepository){
+								  UserRepository userRepository,
+								  UserService userService){
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
 		this.myBeanWithProperties = myBeanWithProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -58,6 +62,22 @@ public class FundamentosApplication implements CommandLineRunner {
 		ejemplosImpresiones();
 		saveUsersInDatabase();
 		getInformationJpqlFromUser();
+		saveWithErrorTransctional();
+	}
+
+	private void saveWithErrorTransctional(){
+		User test1 = new User("test1", "user1@domain.com", LocalDate.now());
+		User test2 = new User("test2", "user2@domain.com", LocalDate.now());
+		User test3 = new User("test3", "user3@domain.com", LocalDate.now());
+
+		List<User> users = Arrays.asList(test1, test2, test3);
+
+		//Guardamos los usuarios en BD
+		userService.saveTransactional(users);
+
+		//Obtenemos los usuarios de la BD
+		userService.getAllUsers().stream()
+				.forEach(user -> LOGGER.info("Usuario obtenido de la BD: "+user));
 	}
 
 	private void getInformationJpqlFromUser(){
