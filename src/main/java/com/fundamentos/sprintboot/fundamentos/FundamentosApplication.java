@@ -68,12 +68,16 @@ public class FundamentosApplication implements CommandLineRunner {
 	private void saveWithErrorTransctional(){
 		User test1 = new User("test1", "user1@domain.com", LocalDate.now());
 		User test2 = new User("test2", "user2@domain.com", LocalDate.now());
-		User test3 = new User("test3", "user3@domain.com", LocalDate.now());
+		User test3 = new User("test3", "user1@domain.com", LocalDate.now());
 
 		List<User> users = Arrays.asList(test1, test2, test3);
 
-		//Guardamos los usuarios en BD
-		userService.saveTransactional(users);
+		try {
+			//Guardamos los usuarios en BD
+			userService.saveTransactional(users);
+		}catch (Exception e){
+			LOGGER.error("Esta es una exception dentro del metodo transactional " + e);
+		}
 
 		//Obtenemos los usuarios de la BD
 		userService.getAllUsers().stream()
