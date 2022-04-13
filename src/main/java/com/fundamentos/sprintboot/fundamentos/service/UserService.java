@@ -36,4 +36,35 @@ public class UserService {
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
+
+    public User save(User newUser) {
+        return userRepository.save(newUser);
+    }
+
+    /**
+     * En este caso eliminamos la entidad que tenga el id que pasamos
+     * como parametro al constructor
+     */
+    public void delete(Long id) {
+        userRepository.delete(new User(id));
+    }
+
+    /**
+     * Se busca el usuaro por ID y en caso de contrarlo se setean los nuevos valores,
+     * se guarda el usuario con los nuevos datos y se retorna.
+     *
+     * Se usa el "get" para obtener esa entidad o también se puede trabajar con el Optional
+     * en el tipo de retorno del método.
+     */
+    public User update(User newUser, Long id) {
+        return  userRepository.findById(id)
+                .map(
+                        user -> {
+                            user.setEmail(newUser.getEmail());
+                            user.setBirthDate(newUser.getBirthDate());
+                            user.setName(newUser.getName());
+                            return userRepository.save(user);
+                        }
+                ).get();
+    }
 }
