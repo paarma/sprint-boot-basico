@@ -4,6 +4,7 @@ import com.fundamentos.sprintboot.fundamentos.entity.User;
 import com.fundamentos.sprintboot.fundamentos.repository.UserRepository;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -66,5 +67,15 @@ public class UserService {
                             return userRepository.save(user);
                         }
                 ).get();
+    }
+
+    /**
+     * Listado de usuarios paginados.
+     * @param page Indica la pagina a mostrar.
+     * @param size Indica la cantidad de usuarios a mostrar por página.
+     * @return Lista de usuarios paginados.
+     */
+    public List<User> getAllUsersPageable(int page, int size){
+        return userRepository.findAll(PageRequest.of(page, size)).getContent();
     }
 }

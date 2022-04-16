@@ -1,9 +1,6 @@
 package com.fundamentos.sprintboot.fundamentos.controller;
 
-import com.fundamentos.sprintboot.fundamentos.caseuse.CreateUser;
-import com.fundamentos.sprintboot.fundamentos.caseuse.DeleteUser;
-import com.fundamentos.sprintboot.fundamentos.caseuse.GetUser;
-import com.fundamentos.sprintboot.fundamentos.caseuse.UpdateUser;
+import com.fundamentos.sprintboot.fundamentos.caseuse.*;
 import com.fundamentos.sprintboot.fundamentos.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +16,17 @@ public class UserRestController {
     private CreateUser createUser;
     private DeleteUser deleteUser;
     private UpdateUser updateUser;
+    private GetUserPageable getUserPageable;
 
     public UserRestController(GetUser getUser, CreateUser createUser,
                               DeleteUser deleteUser,
-                              UpdateUser updateUser) {
+                              UpdateUser updateUser,
+                              GetUserPageable getUserPageable) {
         this.getUser = getUser;
         this.createUser = createUser;
         this.deleteUser = deleteUser;
         this.updateUser = updateUser;
+        this.getUserPageable = getUserPageable;
     }
 
     @GetMapping("/")
@@ -55,5 +55,10 @@ public class UserRestController {
     @PutMapping("/{id}")
     ResponseEntity replaceUser(@RequestBody User newUser, @PathVariable Long id){
         return new ResponseEntity<>(updateUser.update(newUser, id), HttpStatus.OK);
+    }
+
+    @GetMapping("/pageable")
+    List<User> getUserPageable(@RequestParam int page, @RequestParam int size){
+        return getUserPageable.getUserPageable(page, size);
     }
 }
